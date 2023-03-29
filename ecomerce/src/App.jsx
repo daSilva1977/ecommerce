@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useRef, useState } from 'react'
 
-function App() {
-  const [count, setCount] = useState(0)
+import Contenedor from './components/Contenedor/Contenedor'
+import NavBar from './components/NavBar/NavBar'
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
+// import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import ItemListContainer from './components/ItemListContainer/ItemListContainer'
+import { ItemCount } from './components/ItemCount/ItemCount'
+
+
+
+function App() { 
+    const divRef = useRef(null)
+    // console.log(divRef)
+
+    const handleClick = () => {
+        divRef.current.innerHTML = 'nuevo contenido'
+    }
+    // console.log('Componente App')
+    return(
+        <div className='App'>
+            <NavBar />
+            <ItemListContainer greeting='estoy saludando' />
+            <ItemCount />
+        </div>
+)}
 
 export default App
+
+
+// render 
+// 1 ver -> montaje
+// sgtes re render 
+// última -> dismounting
+
+// que produce un re render : 
+    // cambios en un props
+    // cambios en un estados
+    // - evento
