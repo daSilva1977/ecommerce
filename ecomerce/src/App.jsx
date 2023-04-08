@@ -1,14 +1,12 @@
 import { useRef, useState } from 'react'
-
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Contenedor from './components/Contenedor/Contenedor'
 import NavBar from './components/NavBar/NavBar'
-
 // import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ItemListContainer from './components/ItemListContainer/ItemListContainer'
-import { ItemCount } from './components/ItemCount/ItemCount'
-
-
+import ItemDetailContainer from './components/ItemDetailContainer/ItemDetailContainer'
+import { FormContainer } from './components/FormContainer/FormContainer'
 
 function App() { 
     const divRef = useRef(null)
@@ -19,22 +17,18 @@ function App() {
     }
     // console.log('Componente App')
     return(
+        <BrowserRouter>
         <div className='App'>
             <NavBar />
-            <ItemListContainer greeting='estoy saludando' />
-            <ItemCount />
-        </div>
+            <FormContainer/>
+            <Routes>
+            <Route path='/' element={<ItemListContainer greeting='estoy saludando' />} />
+            <Route path='/categoria/:cid' element={<ItemListContainer sgreeting='estoy saludando'/>}/>
+            <Route path='/detail/:pid' element={<ItemDetailContainer />} />     
+            <Route path='*' element={<Navigate to='/'/>} />     
+        </Routes>
+        </div>      
+        </BrowserRouter>
 )}
 
 export default App
-
-
-// render 
-// 1 ver -> montaje
-// sgtes re render 
-// última -> dismounting
-
-// que produce un re render : 
-    // cambios en un props
-    // cambios en un estados
-    // - evento
