@@ -1,60 +1,43 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { mockFetch } from "../../utils/mockFetch"
-import ItemList from "../ItemList/ItemList"
-import { Filter } from "../RenderProps/Filter"
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore'
+
+import ItemList from "../ItemList/ItemList.jsx"
+import Loading from "../Loading/Loading"
 
 const ItemListContainer = () => {
     const [productos, setProductos] = useState([])
-    const {cid} = useParams()
-    useEffect(()=>{
-    if (cid) {
-        mockFetch()
-            .then(resp => {          
-               setProductos(resp.filter(prod => prod.categoria === cid))
-            })        
-            .catch(err => console.log(err))
-            .finally(()=> console.log('Siempre y al último'))          
-        
-    } else {
-        mockFetch()
-            .then(resp => {   
-               setProductos(resp)
-            })        
-            .catch(err => console.log(err))
-            .finally(()=> console.log('Siempre y al último'))             
-    }
-}, [cid])
+    const [isLoading, setIsLoading] = useState(true)
     
-    const hanldePoductsFiltered =  ({filterState, handleFilterChange}) => (
-        <div>
-            <h2>Buscar Producto</h2>
-            <h2>{filterState}</h2>
-            <input type="text" value={filterState} onChange={handleFilterChange} />
-           <ItemList
-                productos = {
-                    filterState === '' ?
-                        productos
-                    :
-                        productos.filter( producto => producto.name.toLowerCase().includes(filterState.toLowerCase()) )
-                }
-            />
-        </div>
-        
-    )
+    const {cid} = useParams()
+
+    useEffect(()=>{
+    const db = getFirestore()        
+    const queryCollection = collection(db, 'productos') 
+    const queryFilter = cid ? query(queryCollection,where('categoria', '==', cid))   : queryCollection
+
+    getDocs(queryFilter)
+    .then(resp => setProductos( resp.docs.map(producto => ({ id: producto.id, ...producto.data() }) ) ))
+    .catch(err => console.log(err))
+    .finally(()=> setIsLoading(false))        
+
+    }, [cid])   
+
+
     return (
         <>
-            { productos.length !== 0 ?
-                  <Filter>
-                  { hanldePoductsFiltered }                   
-               </Filter>
+            { isLoading 
+                ?
+                    <Loading />  
                 :
-                    <h2>Cargando...</h2>
-            }
-            <div>
-        </div>
+                    <ItemList 
+                        productos = {productos}
+                    />
+            
+            }       
+            
         </>
     )
-}      
+}
 
 export default ItemListContainer

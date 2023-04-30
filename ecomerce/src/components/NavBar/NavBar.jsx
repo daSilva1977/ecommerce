@@ -1,24 +1,30 @@
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap"
 import { CartWidget } from "../CartWidget/CartWidget"
+import { useCartContext } from "../../context/CartContext"
+import { categorias } from "../../utils/categorias"
 
 
 const NavBar = () => {
+    const {cantidadTotal} = useCartContext()
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
-                <Link to='/'> Nuevo Proyecto </Link>
+            {/* btn btn-outline-primary */}
+                <NavLink className={({isActive})=> isActive ? 'btn btn-primary' : 'btn btn-outline-primary'} to='/' >Dreamstore</NavLink>
+
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                <Nav className="me-auto">
-                <Link to='/categoria/carteras'>Carteras </Link>
-                <Link to='/categoria/calzado'> Calzado </Link>
+                <Nav className="me-auto">                                      
+                    {categorias.map(item => <Link key={item.id} to={`/categoria/${item.categoria}`}>{item.name}</Link>  )}                    
                 </Nav>
-                <Nav>
-                    3
-                    <Link to='/detail'>  
-                    <CartWidget />
-                    </Link>  
+                <Nav>                    
+
+                    <Link to='/cart'>
+                        {cantidadTotal() >0 && cantidadTotal()}
+                        <CartWidget />
+                    </Link>
+
                 </Nav>
                 </Navbar.Collapse>
             </Container>

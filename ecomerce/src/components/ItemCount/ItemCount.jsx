@@ -1,29 +1,23 @@
 import { useEffect, useRef, useState } from "react"
+import { useCount } from "../../hooks/useCount"
 
-export const ItemCount = () => {
-    const [contador, setContador] = useState(0) 
-    const [booleano, setBooleano ] = useState(true)
-    const renderCount = useRef(0)
+
+export const ItemCount = ({intial=1, stock=5, min=1, onAdd}) => {
+
+    const { contador, increment, decrement, reset } = useCount( 11, 10, 1 )   
     
-    useEffect(()=>{
-        console.log('Efecto siempre- en cada render -1')
-        return () =>{ 
-            console.log('document.removeEventlistener("click", función)')
-        }
-    })
-    const handleContador = () => {        
-        setContador(contador + 1)
+    function handleOnAdd() {
+        onAdd(contador)
     }
-    const handleBool = () => {
-        setBooleano(!booleano)
-    }
-    renderCount.current++
-    console.log('ItemCount-4')
+    
     return ( 
-        <div>
-            <h2>Contador: {contador}</h2>
-            <p>cantidad en count : {renderCount.current}</p>
-            <button onClick={handleContador}> + </button>
-            <button > - </button>
+        <div>        
+            <button className="btn btn-outline-dark" onClick={increment}> + </button>
+            <label>{contador}</label>
+            <button className="btn btn-outline-dark" onClick={decrement}> - </button>
+            <br />
+            {/* <button onClick={reset}> Reset </button> */}
+            <button className="btn btn-outline-dark" onClick={handleOnAdd}> Agregar al Carrito </button>
         </div>  
 )}
+

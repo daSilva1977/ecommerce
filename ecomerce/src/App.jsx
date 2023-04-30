@@ -1,34 +1,57 @@
-import { useRef, useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Contenedor from './components/Contenedor/Contenedor'
+import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
+
 import NavBar from './components/NavBar/NavBar'
-// import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import ItemListContainer from './components/ItemListContainer/ItemListContainer'
 import ItemDetailContainer from './components/ItemDetailContainer/ItemDetailContainer'
+import CartCountainer from './components/CartContainer/CartCountainer'
 import { FormContainer } from './components/FormContainer/FormContainer'
+import { CartContextProvider } from './context/CartContext'
 
-function App() { 
-    const divRef = useRef(null)
-    // console.log(divRef)
 
-    const handleClick = () => {
-        divRef.current.innerHTML = 'nuevo contenido'
-    }
-    // console.log('Componente App')
+import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+
+
+import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+
+
+function App() {        
     return(
-        <BrowserRouter>
-        <div className='App'>
-            <NavBar />
-            <FormContainer/>
-            <Routes>
-            <Route path='/' element={<ItemListContainer greeting='estoy saludando' />} />
-            <Route path='/categoria/:cid' element={<ItemListContainer sgreeting='estoy saludando'/>}/>
-            <Route path='/detail/:pid' element={<ItemDetailContainer />} />     
-            <Route path='*' element={<Navigate to='/'/>} />     
-        </Routes>
-        </div>      
-        </BrowserRouter>
+
+        <CartContextProvider>
+            <BrowserRouter>
+                    <div 
+                        className='App'
+                        // onClick={()=> alert('click de app')}
+                    >
+                        <NavBar />
+                        <Routes>
+                            <Route path='/' element={
+                                
+                                    <ItemListContainer greeting='estoy saludando' />
+                                
+                            } />
+                            <Route path='/categoria/:cid' element={<ItemListContainer greeting='estoy saludando' />} />
+
+                            <Route path='/detail/:pid' element={
+                               
+                                    <ItemDetailContainer /> 
+                                
+                                } />
+                            <Route path='/contacto' element={<FormContainer  /> } />
+                            <Route path='/cart' element={<CartCountainer />} />  
+                            
+
+                            <Route path='*' element={<Navigate to='/' />} />                       
+                        </Routes>
+                    
+                    </div>            
+            </BrowserRouter>
+        </CartContextProvider>
 )}
 
 export default App
+
